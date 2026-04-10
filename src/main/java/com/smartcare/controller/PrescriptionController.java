@@ -20,7 +20,11 @@ public class PrescriptionController {
     }
 
     @PostMapping
-    public ResponseEntity<Prescription> generatePrescription(@RequestBody Prescription prescription) {
-        return ResponseEntity.ok(prescriptionRepository.save(prescription));
+    public ResponseEntity<java.util.Map<String, String>> generatePrescription(@jakarta.validation.Valid @RequestBody Prescription prescription) {
+        prescriptionRepository.save(prescription);
+        java.util.Map<String, String> response = new java.util.HashMap<>();
+        response.put("status", "success");
+        response.put("message", "Prescription generated successfully for patient: " + prescription.getPatientName());
+        return ResponseEntity.ok(response);
     }
 }

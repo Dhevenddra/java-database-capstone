@@ -9,31 +9,56 @@ import jakarta.validation.constraints.Size;
 
 import java.util.List;
 
+/**
+ * Entity representing a Doctor in the SmartCare Clinic System.
+ * Stores personal, authentication, and availability info for medical queries.
+ */
 @Entity
 public class Doctor {
+    /**
+     * Unique identifier for the doctor.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
+    /**
+     * Full name of the doctor.
+     */
     @NotNull
     @Size(min = 3, max = 100)
     private String name;
     
+    /**
+     * Medical specialty of the doctor.
+     */
     @NotNull
     @Size(min = 3, max = 50)
     private String specialty;
     
+    /**
+     * Unique email address for notifications and login.
+     */
     @Email
     @NotNull
     private String email;
     
+    /**
+     * Password credentials for secure access. Excluded from JSON reads.
+     */
     @Size(min = 6)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     
+    /**
+     * 10-digit direct contact phone number.
+     */
     @Pattern(regexp = "\\d{10}")
     private String phone;
     
+    /**
+     * Available operating hours stored as dynamic list strings.
+     */
     @ElementCollection
     private List<String> availableTimes;
 

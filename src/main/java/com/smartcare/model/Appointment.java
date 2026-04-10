@@ -19,6 +19,7 @@ public class Appointment {
     @NotNull
     private Patient patient;
 
+    @NotNull
     @Future
     private LocalDateTime appointmentTime;
 

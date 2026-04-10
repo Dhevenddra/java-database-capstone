@@ -21,7 +21,19 @@ public class AppointmentService {
         return appointmentRepository.findByDoctorId(doctorId);
     }
 
-    public Appointment scheduleAppointment(Appointment appointment) {
+    /**
+     * Retrieves appointments for a specific date.
+     */
+    public List<Appointment> getAppointmentsByDate(java.time.LocalDate date) {
+        java.time.LocalDateTime startOfDay = date.atStartOfDay();
+        java.time.LocalDateTime endOfDay = date.atTime(23, 59, 59);
+        return appointmentRepository.findByAppointmentTimeBetween(startOfDay, endOfDay);
+    }
+
+    /**
+     * Schedules a new appointment by directly calling save() on the repository.
+     */
+    public Appointment bookAppointment(Appointment appointment) {
         appointment.setStatus(0); // 0 = Scheduled
         return appointmentRepository.save(appointment);
     }
