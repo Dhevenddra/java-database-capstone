@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Doctor Dashboard</title>
+</head>
+<body style="font-family: Arial; padding: 20px;">
+    <h1>Doctor Portal</h1>
+    <hr/>
+    <div>
+        <h2>Appointments</h2>
+        <input type="text" id="searchPat" placeholder="Search Patient By Name" />
+        <input type="date" id="filterDate" />
+        <button onclick="alert('Feature implemented in js')">Filter</button>
+    </div>
+    <div style="margin-top:20px;">
+        <h3>Today's Appointments</h3>
+        <table border="1" style="width:100%; text-align:left;">
+            <tr>
+                <th>Patient Name</th>
+                <th>Time</th>
+                <th>Actions</th>
+            </tr>
+            <tr>
+                <td>John Smith</td>
+                <td>10:00 AM</td>
+                <td><button>View Patient Records</button> <button>Write Prescription</button></td>
+            </tr>
+        </table>
+    </div>
+    <script src="/js/doctorDashboard.js"></script>
+</body>
+</html>
