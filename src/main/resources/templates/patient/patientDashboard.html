@@ -14,28 +14,91 @@
             <option value="Cardiology">Cardiology</option>
             <option value="Diagnostics">Diagnostics</option>
         </select>
-        <button onclick="alert('Feature implemented in js')">Find Doctor</button>
+        <button onclick="searchDoctors()">Find Doctor</button>
     </div>
+    
+    <div id="searchResults" style="margin-top:20px; display:none;">
+        <h3 id="searchResultsTitle" style="color: #0056b3;">Search Results</h3>
+        <table border="1" style="width:100%; text-align:left;">
+            <thead>
+                <tr>
+                    <th>Doctor Name</th>
+                    <th>Specialty</th>
+                    <th>Contact</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="searchTableBody">
+                <!-- Search results injected here via JS -->
+            </tbody>
+        </table>
+    </div>
+
     <div style="margin-top:20px;">
         <h3>My Upcoming Appointments</h3>
         <table border="1" style="width:100%; text-align:left;">
-            <tr>
-                <th>Doctor</th>
-                <th>Specialty</th>
-                <th>Time</th>
-                <th>Actions</th>
-            </tr>
-            <tr>
-                <td>Dr. Sarah Miller</td>
-                <td>Cardiology</td>
-                <td>2026-04-12 10:00 AM</td>
-                <td><button>Cancel</button></td>
-            </tr>
+            <thead>
+                <tr>
+                    <th>Doctor</th>
+                    <th>Specialty</th>
+                    <th>Time</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="appointmentsBody">
+                <!-- Appointments loaded via JS -->
+                 <tr>
+                    <td>Dr. Sarah Miller</td>
+                    <td>Cardiology</td>
+                    <td>2026-04-12 10:00 AM</td>
+                    <td><button>Cancel</button></td>
+                </tr>
+            </tbody>
         </table>
     </div>
     <div style="margin-top:20px;">
         <button onclick="alert('Viewing Past Prescriptions')">View Past Prescriptions</button>
     </div>
-    <script src="/js/patientDashboard.js"></script>
+
+    <script>
+        function searchDoctors() {
+            const name = document.getElementById('searchDocName').value.toLowerCase();
+            const specialty = document.getElementById('specialtySelect').value.toLowerCase();
+            
+            // Build simple query string
+            let url = '/api/doctors';
+            
+            fetch(url)
+                .then(res => res.json())
+                .then(doctors => {
+                    const tbody = document.getElementById('searchTableBody');
+                    tbody.innerHTML = ''; // Clear prior search
+                    
+                    let found = false;
+                    
+                    doctors.forEach(doc => {
+                        let docNameMatch = name === "" || doc.name.toLowerCase().includes(name);
+                        let specialtyMatch = specialty === "" || doc.specialty.toLowerCase() === specialty;
+                        
+                        if (docNameMatch && specialtyMatch) {
+                            found = true;
+                            tbody.innerHTML += `<tr>
+                                <td>${doc.name}</td>
+                                <td>${doc.specialty}</td>
+                                <td>${doc.email}</td>
+                                <td><button onclick="alert('Booking appointment with ${doc.name}...')">Book Now</button></td>
+                            </tr>`;
+                        }
+                    });
+                    
+                    if(!found) {
+                        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:red;">No doctors found matching criteria.</td></tr>`;
+                    }
+                })
+                .catch(err => {
+                    console.error("Error fetching doctors", err);
+                });
+        }
+    </script>
 </body>
 </html>

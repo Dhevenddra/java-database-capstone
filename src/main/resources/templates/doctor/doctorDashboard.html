@@ -2,8 +2,16 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Doctor Dashboard</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        .modal { display: none; position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.4); }
+        .modal-content { background-color: #fefefe; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 400px; border-radius: 8px; }
+        .close { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
+        .close:hover { color: black; }
+        .record-card { border: 1px solid #ddd; padding: 10px; border-radius: 5px; margin-bottom: 10px; background: #f9f9f9; }
+    </style>
 </head>
-<body style="font-family: Arial; padding: 20px;">
+<body>
     <h1>Doctor Portal</h1>
     <hr/>
     <div>
@@ -12,6 +20,7 @@
         <input type="date" id="filterDate" />
         <button onclick="alert('Feature implemented in js')">Filter</button>
     </div>
+    
     <div style="margin-top:20px;">
         <h3>Today's Appointments</h3>
         <table border="1" style="width:100%; text-align:left;">
@@ -21,12 +30,57 @@
                 <th>Actions</th>
             </tr>
             <tr>
-                <td>John Smith</td>
+                <td id="targetPatient">John Smith</td>
                 <td>10:00 AM</td>
-                <td><button>View Patient Records</button> <button>Write Prescription</button></td>
+                <td>
+                    <button onclick="viewRecords('John Smith')">View Patient Records</button> 
+                    <button onclick="alert('Writing prescription window opening...')">Write Prescription</button>
+                </td>
             </tr>
         </table>
     </div>
-    <script src="/js/doctorDashboard.js"></script>
+
+    <!-- The Modal -->
+    <div id="recordsModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="document.getElementById('recordsModal').style.display='none'">&times;</span>
+        <h3>Medical Records for <span id="modalPatName"></span></h3>
+        <div id="recordsList">
+            <!-- Records injected here -->
+        </div>
+      </div>
+    </div>
+
+    <script>
+        function viewRecords(patientName) {
+            document.getElementById('modalPatName').innerText = patientName;
+            
+            fetch('/api/prescriptions/patient/' + encodeURIComponent(patientName))
+                .then(res => res.json())
+                .then(data => {
+                    const list = document.getElementById('recordsList');
+                    list.innerHTML = '';
+                    
+                    if(data.length === 0) {
+                        list.innerHTML = '<p style="color:gray;">No previous records found.</p>';
+                    } else {
+                        data.forEach(rec => {
+                            list.innerHTML += `
+                                <div class="record-card">
+                                    <strong>Medications:</strong> ${rec.medications} <br/>
+                                    <strong>Doctor Notes:</strong> ${rec.doctorNotes} <br/>
+                                </div>
+                            `;
+                        });
+                    }
+                    
+                    document.getElementById('recordsModal').style.display='block';
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert("Error loading records");
+                });
+        }
+    </script>
 </body>
 </html>
