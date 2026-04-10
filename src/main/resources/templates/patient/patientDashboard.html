@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Patient Dashboard</title>
+</head>
+<body style="font-family: Arial; padding: 20px;">
+    <h1>Patient Portal</h1>
+    <hr/>
+    <div>
+        <h2>Book an Appointment</h2>
+        <input type="text" id="searchDocName" placeholder="Search Doctor By Name" />
+        <select id="specialtySelect">
+            <option value="">All Specialties</option>
+            <option value="Cardiology">Cardiology</option>
+            <option value="Diagnostics">Diagnostics</option>
+        </select>
+        <button onclick="alert('Feature implemented in js')">Find Doctor</button>
+    </div>
+    <div style="margin-top:20px;">
+        <h3>My Upcoming Appointments</h3>
+        <table border="1" style="width:100%; text-align:left;">
+            <tr>
+                <th>Doctor</th>
+                <th>Specialty</th>
+                <th>Time</th>
+                <th>Actions</th>
+            </tr>
+            <tr>
+                <td>Dr. Sarah Miller</td>
+                <td>Cardiology</td>
+                <td>2026-04-12 10:00 AM</td>
+                <td><button>Cancel</button></td>
+            </tr>
+        </table>
+    </div>
+    <div style="margin-top:20px;">
+        <button onclick="alert('Viewing Past Prescriptions')">View Past Prescriptions</button>
+    </div>
+    <script src="/js/patientDashboard.js"></script>
+</body>
+</html>

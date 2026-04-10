@@ -28,6 +28,14 @@ public class DashboardController {
         return "redirect:/login";
     }
 
+    @GetMapping("/patientDashboard/{token}")
+    public String patientDashboard(@PathVariable String token) {
+        if(tokenService.validateToken(token, "patient")) {
+            return "patient/patientDashboard";
+        }
+        return "redirect:/login";
+    }
+
     @GetMapping("/login")
     public String login() {
         return "login";
